@@ -1,6 +1,7 @@
 package cognitiveTraining;
 
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -10,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+@SuppressWarnings("serial")
 public class Cognition extends JFrame implements ActionListener{
 	
 	ImageIcon mainPage = new ImageIcon("./temp/mainPage.png");
@@ -18,8 +20,11 @@ public class Cognition extends JFrame implements ActionListener{
 	JButton calculationGameBtn = new JButton(caculationIcon);
 	JButton memoryGameBtn = new JButton(memoryIcon);
 	
-	static final int SCREEN_WIDTH = 648;
-	static final int SCREEN_HEIGHT = 648;
+	Image buffImage;
+	Graphics graphics;
+	
+	public static final int SCREEN_WIDTH = 648;
+	public static final int SCREEN_HEIGHT = 648;
 	int aboveGab = 300; //패널 윗쪽부터 버튼까지의 갭
 	int betweenBtnsGab = 20; //버튼끼리의 갭
 	int btnWidth = 200;
@@ -47,6 +52,8 @@ public class Cognition extends JFrame implements ActionListener{
 		}
 	}
 	
+
+	
 	public Cognition() {
 		init();
 		
@@ -57,6 +64,7 @@ public class Cognition extends JFrame implements ActionListener{
 	
 	public void init() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		setUndecorated(true);
 		setSize(SCREEN_WIDTH,SCREEN_HEIGHT);
 		setTitle("인지수업");
 		setResizable(false);
@@ -78,9 +86,13 @@ public class Cognition extends JFrame implements ActionListener{
 	
 	
 	public void paint(Graphics g) { //메인페이지의 백그라운드 이미지
-		super.paint(g);
-		g.drawImage(mainPage.getImage(), 0, 0, null);
+		buffImage = createImage(SCREEN_WIDTH, SCREEN_HEIGHT);
+		graphics = buffImage.getGraphics();
+		drawScreen(g);
 	}
-	
+	public void drawScreen(Graphics g) {
+		graphics.drawImage(mainPage.getImage(),0,0,this);
+		g.drawImage(buffImage, 0, 0,  this);
+	}
 
 }

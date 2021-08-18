@@ -16,9 +16,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
+@SuppressWarnings({ "serial", "unused" })
 public class CaculationGame extends JFrame implements ActionListener, MouseListener{
 
 	int a, b, c, d;
+	
+	Image buffImage;
+	Graphics graphics;
 	
 	Image calculationPanel = new ImageIcon("./temp/calculationPanel.png").getImage();
 	Icon firstBtnImage = new ImageIcon("./temp/firstBtn.png");
@@ -45,23 +49,30 @@ public class CaculationGame extends JFrame implements ActionListener, MouseListe
 	JLabel question = new JLabel("-",SwingConstants.CENTER);
 	
 	Cognition cognition = new Cognition();
-
 	
-	public void paint(Graphics g2d) {
-		super.paint(g2d);
-		g2d.drawImage(calculationPanel, 0,0,null);
+	@SuppressWarnings("static-access")
+	public void paint(Graphics g) {
+		buffImage = createImage(cognition.SCREEN_WIDTH,cognition.SCREEN_HEIGHT);
+		graphics = buffImage.getGraphics();
+		drawScreen(graphics);
+		g.drawImage(buffImage, 0, 0, null);
 	}
 	
+	public void drawScreen(Graphics g) {
+		g.drawImage(calculationPanel, 0,0,null);
+	}
 	
 	public CaculationGame() {
 		setBtn();
 		init();
 	}
 	
+	@SuppressWarnings("static-access")
 	public void init() {
 		setSize(cognition.SCREEN_WIDTH,cognition.SCREEN_HEIGHT);
 		setLocationRelativeTo(null);
 		setTitle("계산능력 훈련");
+		setUndecorated(true);
 		setLayout(null);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -84,13 +95,18 @@ public class CaculationGame extends JFrame implements ActionListener, MouseListe
 	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == firstBtn) {
+			int c = 1000000*1000000/1000000;
+			System.out.println(c);
 			
 		}else if(e.getSource() == secondBtn) {
-			
+			int c = 1000000/1000000*1000000;
+			System.out.println(c);
 		}else if(e.getSource() == thirdBtn) {
+			String i  = x<<n;
 			
+			System.out.println(i);
 		}else if(e.getSource() == fourthBtn) {
-			
+			System.out.println(4);
 		}else if(e.getSource() == backToMainBtn) {
 			this.setVisible(false);
 			cognition.setVisible(true);
@@ -117,12 +133,10 @@ public class CaculationGame extends JFrame implements ActionListener, MouseListe
 		return c;
 	}
 
-
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 		
 	}
-
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
@@ -137,7 +151,6 @@ public class CaculationGame extends JFrame implements ActionListener, MouseListe
 		}
 	}
 
-
 	@Override
 	public void mouseExited(MouseEvent e) {
 		if(e.getSource()==firstBtn) {
@@ -150,7 +163,6 @@ public class CaculationGame extends JFrame implements ActionListener, MouseListe
 			fourthBtn.setIcon(fourthBtnImage);
 		}
 	}
-
 
 	@Override
 	public void mousePressed(MouseEvent e) {
@@ -165,7 +177,6 @@ public class CaculationGame extends JFrame implements ActionListener, MouseListe
 		}
 	}
 
-
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		if(e.getSource()==firstBtn) {
@@ -177,7 +188,5 @@ public class CaculationGame extends JFrame implements ActionListener, MouseListe
 		}else if(e.getSource()==fourthBtn) {
 			fourthBtn.setIcon(fourthBtnImage);
 		}
-		
 	}
-
 }
