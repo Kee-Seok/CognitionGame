@@ -56,7 +56,7 @@ public class Cognition extends JFrame implements ActionListener{
 		if(e.getSource()==calculationGameBtn) {
 			System.out.println("계산능력 훈련으로");
 			this.setVisible(false);
-			CaculationGame cal = new CaculationGame();
+			CalculationGame cal = new CalculationGame();
 			cal.setVisible(true);
 		}else if(e.getSource()==memoryGameBtn) {
 			System.out.println("기억력 훈련으로");
