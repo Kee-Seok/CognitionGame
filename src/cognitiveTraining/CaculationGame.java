@@ -21,6 +21,7 @@ public class CaculationGame extends JFrame implements ActionListener, MouseListe
 
 	int a, b, c, d;
 	
+	
 	Image buffImage;
 	Graphics graphics;
 	
@@ -52,6 +53,29 @@ public class CaculationGame extends JFrame implements ActionListener, MouseListe
 	JLabel question = new JLabel("-",SwingConstants.CENTER);
 	
 	Cognition cognition = new Cognition();
+	
+	class Cal {
+		
+		public int plus(int a, int b) {
+			
+			return c;
+		}
+		
+		public int minus(int a, int b) {
+			
+			return c;
+		}
+		
+		public int times(int a, int b) {
+			
+			return c;
+		}
+		
+		public int divide(int a, int b) {
+			
+			return c;
+		}
+	}
 	
 	@SuppressWarnings("static-access")
 	public void paint(Graphics g) {
@@ -122,25 +146,7 @@ public class CaculationGame extends JFrame implements ActionListener, MouseListe
 		}
 	}
 	
-	public int plus(int a, int b) {
-		
-		return c;
-	}
 	
-	public int minus(int a, int b) {
-		
-		return c;
-	}
-	
-	public int times(int a, int b) {
-		
-		return c;
-	}
-	
-	public int divide(int a, int b) {
-		
-		return c;
-	}
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
