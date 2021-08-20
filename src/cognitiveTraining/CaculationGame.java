@@ -7,7 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionAdapter;
+import java.util.ArrayList;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -46,6 +46,9 @@ public class CaculationGame extends JFrame implements ActionListener, MouseListe
 	JButton startBtn = new JButton("시작");
 	JButton backToMainBtn = new JButton("돌아가기");
 	
+	JButton[] btnsArray = {firstBtn,secondBtn,thirdBtn,fourthBtn,backToMainBtn};
+	ArrayList<JButton> btns = new ArrayList<JButton>();
+	
 	JLabel question = new JLabel("-",SwingConstants.CENTER);
 	
 	Cognition cognition = new Cognition();
@@ -56,6 +59,9 @@ public class CaculationGame extends JFrame implements ActionListener, MouseListe
 		graphics = buffImage.getGraphics();
 		drawScreen(graphics);
 		g.drawImage(buffImage, 0, 0, null);
+		for(int i = 0; i < btns.size(); i++) {
+			btns.get(i).repaint();
+		}
 	}
 	
 	public void drawScreen(Graphics g) {
@@ -85,6 +91,10 @@ public class CaculationGame extends JFrame implements ActionListener, MouseListe
 		thirdBtn.setBounds(10,440,300,70); thirdBtn.setBorderPainted(false); thirdBtn.setContentAreaFilled(false); thirdBtn.setFocusPainted(false); thirdBtn.addActionListener(this);
 		fourthBtn.setBounds(330,440,300,70); fourthBtn.setBorderPainted(false); fourthBtn.setContentAreaFilled(false); fourthBtn.setFocusPainted(false); fourthBtn.addActionListener(this);
 		backToMainBtn.setBounds(330,540,300,70); backToMainBtn.setFont(new Font("serif",Font.BOLD,50)); backToMainBtn.addActionListener(this);
+		
+		for(int i = 0; i < btnsArray.length; i++) {
+			btns.add(btnsArray[i]);
+		}
 		add(firstBtn);
 		add(secondBtn);
 		add(thirdBtn);
@@ -102,8 +112,7 @@ public class CaculationGame extends JFrame implements ActionListener, MouseListe
 			int c = 1000000/1000000*1000000;
 			System.out.println(c);
 		}else if(e.getSource() == thirdBtn) {
-			String i  = x<<n;
-			
+			int i = '2'-'0';
 			System.out.println(i);
 		}else if(e.getSource() == fourthBtn) {
 			System.out.println(4);
