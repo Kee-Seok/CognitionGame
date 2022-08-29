@@ -63,7 +63,7 @@ public class Main extends JFrame {
 	SelectGamePanel selectGamePanel = new SelectGamePanel();
 	TitlePanel titlePanel = new TitlePanel();
 	PictureQuiz pictureQuizPanel = new PictureQuiz();
-	
+	FindSamePicture fsp = new FindSamePicture();
 	static Color titleFontColor = C.a10035[0];
 	static Color selectGamePanelColor = C.a10035[1];
 	static Color titlePanelColor = C.a10035[2];
@@ -76,6 +76,7 @@ public class Main extends JFrame {
 		setVisible(true);
 		pictureQuizPanel.refresh();
 		this.requestFocus();
+		fsp.setVisible(false);
 		t.start();
 	}
 
@@ -83,6 +84,7 @@ public class Main extends JFrame {
 		titlePanel.setVisible(true);
 		pictureQuizPanel.setVisible(false);
 		selectGamePanel.setVisible(true);
+		fsp.setVisible(false);
 		scroll.setVisible(true);
 	}
 
@@ -90,7 +92,17 @@ public class Main extends JFrame {
 		titlePanel.setVisible(true);
 		pictureQuizPanel.setVisible(true);
 		selectGamePanel.setVisible(false);
+		fsp.setVisible(false);
 		scroll.setVisible(false);
+	}
+	
+	public void goFsp() {//  버튼누르면 패널 전환하는 메소드
+		titlePanel.setVisible(true);
+		pictureQuizPanel.setVisible(false);
+		selectGamePanel.setVisible(false);
+		scroll.setVisible(false);
+		fsp.setVisible(true);
+		
 	}
 
 	public void add() {
@@ -105,6 +117,8 @@ public class Main extends JFrame {
 		titlePanel.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT / 5);
 		titlePanel.add(exitBtn);
 
+		fsp.setBounds(0, SCREEN_HEIGHT / 5, SCREEN_WIDTH, SCREEN_HEIGHT * 4 / 5);
+		fsp.addKeyListener(new KeySetting());
 		pictureQuizPanel.setBounds(0, SCREEN_HEIGHT / 5, SCREEN_WIDTH, SCREEN_HEIGHT * 4 / 5);
 		pictureQuizPanel.addKeyListener(new KeySetting());
 		scroll = new JScrollPane(selectGamePanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
@@ -135,7 +149,7 @@ public class Main extends JFrame {
 																														// 따른
 																														// 패널
 																														// 크기
-																														// 조정
+		add(fsp);																								// 조정
 		add(pictureQuizPanel);
 		add(titlePanel);
 		add(scroll);
@@ -163,7 +177,7 @@ public class Main extends JFrame {
 				goToMain();
 				title = "인지프로그램";
 				titlePanel.repaint();
-				
+				fsp.refresh();
 				break;
 			}
 		}
@@ -225,6 +239,11 @@ public class Main extends JFrame {
 				pictureQuizPanel.requestFocus();
 			} else if (e.getSource() == exitBtn) {
 				System.exit(0);
+			} else if (e.getActionCommand() == "같은 그림카드 찾기") {
+				goFsp();
+				title = " 같은카드찾기";
+				titlePanel.repaint();
+				fsp.requestFocus();
 			}
 		}
 
