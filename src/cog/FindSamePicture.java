@@ -30,7 +30,7 @@ public class FindSamePicture extends JPanel {
 	JLabel[][] label = new JLabel[5][2];// JLabel 세팅
 	int gabX; // 카드간의 좌우 거리
 	int gabY = (screenH - (cardH * 2)) / 3; // 카드간의 위아래 거리
-	int reversedCard; // 뒤집힌 카드 개수
+	int reversedCard = -1; // 뒤집힌 카드 개수
 	MyImage currImg; // 방금 뒤집힌 카드를 집어넣을 변수.
 	int currX, currY, backIndex; // 방금 누른 카드의 좌표를 저장하는 변수.
 	int click; //클릭한 횟수 1로 제한.
@@ -50,7 +50,6 @@ public class FindSamePicture extends JPanel {
 	ArrayList<MyImage> imgArr = new ArrayList<>();
 	ArrayList<MyImage> frontImgs = new ArrayList<>();
 	public FindSamePicture() {
-		getImages();
 		startLevel(level);
 		this.setBackground(C.a614124[0]);
 		this.setLayout(null);
@@ -60,7 +59,50 @@ public class FindSamePicture extends JPanel {
 	}
 	class MouseSetting implements MouseListener {
 		public void mousePressed(MouseEvent e) {
-			
+			if(reversedCard==-1) {
+				new Thread() {
+					public void run() {
+						try {
+							refresh(level);
+							for (int y = 0; y < 2; y++) {
+								for (int x = 0; x < getCardNumbs(level); x++) {
+									label[x][y].setIcon(cardFrontImg[x][y]);
+								}
+							}
+							reversedCard=0;
+							Thread.sleep(1000);
+						}catch(Exception ex) {
+							ex.printStackTrace();
+						}
+					}
+				}.start();
+				new Thread() {
+					public void run() {
+						try {
+							refresh(level);
+							for (int y = 0; y < 2; y++) {
+								for (int x = 0; x < getCardNumbs(level); x++) {
+									label[x][y].setIcon(cardBackImg[x][y]);
+								}
+							}
+						}catch(Exception ex) {
+							ex.printStackTrace();
+						}
+					}
+				}.start();
+			}else if(reversedCard==9) {
+				new Thread() {
+					public void run() {
+						try {
+							Thread.sleep(1000);
+							refresh(level);
+							reversedCard=-1;
+						}catch(Exception ex) {
+							ex.printStackTrace();
+						}
+					}
+				}.start();
+			}
 			for(int x = 0; x < getCardNumbs(level); x++) {
 				for(int y = 0; y < 2; y++) {
 			if(e.getSource().equals(label[x][y])&&label[x][y].getName().equals("활성")) {
@@ -524,8 +566,8 @@ public class FindSamePicture extends JPanel {
 					label[4][1].setIcon(cardFrontImg[4][1]);
 					label[4][1].setName("비활성");
 					Thread.sleep(sleepTime);
-					label[4][1].setName("활성");
 					System.out.println("눌렸다");
+					label[4][1].setName("활성");
 					}catch(Exception e) {
 						e.printStackTrace();
 					}
@@ -569,7 +611,13 @@ public class FindSamePicture extends JPanel {
 		System.out.println("currX : "+currX);
 		System.out.println("currY : "+currY);
 	}
-
+	public void checkIsClicked(int x1, int y1, int x2, int y2) {
+		if(x1==x2&&y1==y2) {
+			label[x1][y1].setName("비활성");
+		}else if(x1!=x2||y1!=y2){
+			label[x1][y1].setName("활성");
+		}
+	}
 	public boolean isReverseTwice(int level) { // 카드 두개가 뒤집혔는지 확인.
 		if (level == 1) {
 			if (reversedCard == 2 || reversedCard == 4 || reversedCard == 6) {
@@ -618,23 +666,10 @@ public class FindSamePicture extends JPanel {
 		setCardImages(level);
 		for (int y = 0; y < 2; y++) {
 			for (int x = 0; x < getCardNumbs(level); x++) {
-				label[x][y] = new JLabel(cardFrontImg[x][y]);
+				label[x][y] = new JLabel();
 			}
 		}
-		//new Thread() {
-		//	public void run() {
-		//		try {
-		//			for (int y = 0; y < 2; y++) {
-		//				for (int x = 0; x < getCardNumbs(level); x++) {
-		//					label[x][y].setIcon(cardFrontImg[x][y]);
-		//				}
-		//			}
-		//			Thread.sleep(firstSleep);
-		//		}catch(Exception e) {
-		//			e.printStackTrace();
-		//		}
-		//	}
-		//}.start();
+
 		for (int y = 0; y < 2; y++) {
 			for (int x = 0; x < getCardNumbs(level); x++) {
 				cardP[x][y] = new Point(gabX + (cardW + gabX) * x, gabY + (gabY + cardH) * y);
@@ -659,6 +694,42 @@ public class FindSamePicture extends JPanel {
 				add(label[x][y]);
 				index++;
 			}
+		}
+		if(reversedCard==-1) {
+			new Thread() {
+				public void run() {
+					try {
+						refresh(level);
+						for (int y = 0; y < 2; y++) {
+							for (int x = 0; x < getCardNumbs(level); x++) {
+								label[x][y].setIcon(cardFrontImg[x][y]);
+							}
+						}
+						Thread.sleep(1000);
+						for (int y = 0; y < 2; y++) {
+							for (int x = 0; x < getCardNumbs(level); x++) {
+								label[x][y].setIcon(cardBackImg[x][y]);
+							}
+						}
+						reversedCard=0;
+					}catch(Exception ex) {
+						ex.printStackTrace();
+					}
+				}
+			}.start();
+			try {
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+			new Thread() {
+				public void run() {
+					try {
+
+					}catch(Exception ex) {
+						ex.printStackTrace();
+					}
+				}
+			}.start();
 		}
 	}
 	public void refresh(int level) { // 다시 리프레쉬할때
