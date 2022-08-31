@@ -182,6 +182,7 @@ public class Main extends JFrame {
 				fsp.level = 1;
 				fsp.startLevel(fsp.level);
 				fsp.paintFirstScreen();
+				fsp.enterEnable = true;
 				break;
 			}
 		}
