@@ -85,6 +85,7 @@ public class Main extends JFrame {
 		pictureQuizPanel.setVisible(false);
 		selectGamePanel.setVisible(true);
 		fsp.setVisible(false);
+		
 		scroll.setVisible(true);
 	}
 
@@ -102,7 +103,7 @@ public class Main extends JFrame {
 		selectGamePanel.setVisible(false);
 		scroll.setVisible(false);
 		fsp.setVisible(true);
-		
+		fsp.paintFirstScreen();
 	}
 
 	public void add() {
@@ -177,7 +178,10 @@ public class Main extends JFrame {
 				goToMain();
 				title = "인지프로그램";
 				titlePanel.repaint();
-				fsp.refresh();
+				fsp.removeLabels(fsp.level);
+				fsp.level = 1;
+				fsp.startLevel(fsp.level);
+				fsp.paintFirstScreen();
 				break;
 			}
 		}

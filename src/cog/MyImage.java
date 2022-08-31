@@ -2,6 +2,7 @@ package cog;
 
 import javax.swing.ImageIcon;
 
+@SuppressWarnings("serial")
 public class MyImage extends ImageIcon{
 	String name;
 	public MyImage(ImageIcon img) {

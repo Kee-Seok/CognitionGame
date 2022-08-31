@@ -9,6 +9,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+@SuppressWarnings("unused")
 public class ImageCrawling {
 
 	String url = "https://www.google.com/search?q=";
