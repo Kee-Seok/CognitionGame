@@ -74,16 +74,12 @@ public class FindSamePicture extends JPanel {
 			}
 		});
 	}
-
-	public void cardCheck(int x, int y) {
+	public void cardCheck(MouseEvent e, int x, int y) {
 		new Thread() {
 			public void run() {
 				try {
 					label[x][y].setIcon(cardFrontImg[x][y]);
-					label[x][y].setName("비활성");
 					Thread.sleep(sleepTime);
-					System.out.println("눌렸다");
-					label[x][y].setName("활성");
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -91,15 +87,18 @@ public class FindSamePicture extends JPanel {
 		}.start();
 		if (isReverseTwice(level)) {
 			if (checkIsSame(cardFrontImg[x][y], currImg)) {
+				checkIndex(e);
+				if(rightX==currX&&rightY==currY) {
+					label[rightX][rightY].setName("비활성");
+					reversedCard -=1;
+					System.out.println("또 똑같은거 눌렀네;;");
+				}else {
 				System.out.println("두개의 이미지가 같다!");
 				label[x][y].setName("비활성");
 				label[currX][currY].setName("비활성"); // 일치하면 다시 클릭이 안되게끔 막는다.
 				return;// 두개 이미지가 같은지 다른지 체크, 같으면 그냥 냅둔다.
+				}
 			} else { // 두개 이미지가 다르면 뒤집는다.
-
-				System.out.println(cardFrontImg[x][y].getDescription());
-				System.out.println(currImg.getDescription());
-				System.out.println("다르다!");
 
 				new Thread() {
 					public void run() {
@@ -112,6 +111,8 @@ public class FindSamePicture extends JPanel {
 						}
 					}
 				}.start();
+				label[x][y].setName("활성");
+				label[currX][currY].setName("활성");
 				reversedCard -= 2;
 				return;
 			}
@@ -140,6 +141,7 @@ public class FindSamePicture extends JPanel {
 			else if (x == 0 && y == 4)
 				backIndex = 9;
 		}
+		System.out.println("뒤집힌 카드 개수 : " + reversedCard);
 	}
 
 	public void refresh() {
@@ -264,13 +266,15 @@ public class FindSamePicture extends JPanel {
 					}
 				}.start();
 			}else {
+
 				for (int y = 0; y < 2; y++) {
 					for (int x = 0; x < getCardNumbs(level); x++) {
 				label[x][y].setName("활성");
 					}
 				}
 				check(e, level);
-			}
+				}
+			
 
 		}
 
@@ -348,46 +352,48 @@ public class FindSamePicture extends JPanel {
 	public void check(MouseEvent e, int level) {
 		if (e.getSource().equals(label[0][0])&&label[0][0].getName()=="활성") {
 			reversedCard++;
-			cardCheck(0,0);
+			cardCheck(e,0,0);
 		} else if (e.getSource().equals(label[1][0])&&label[1][0].getName()=="활성") {
 			reversedCard++;
-			cardCheck(1,0);
+			cardCheck(e,1,0);
 		} else if (e.getSource().equals(label[2][0])&&label[2][0].getName()=="활성") {
 			reversedCard++;
-			cardCheck(2,0);
+			cardCheck(e,2,0);
 		} else if (e.getSource().equals(label[3][0])&&label[3][0].getName()=="활성") {
 			reversedCard++;
-			cardCheck(3,0);
+			cardCheck(e,3,0);
 		} else if (e.getSource().equals(label[4][0])&&label[4][0].getName()=="활성") {
 			reversedCard++;
-			cardCheck(4,0);
+			cardCheck(e,4,0);
 		} else if (e.getSource().equals(label[0][1])&&label[0][1].getName()=="활성") {
 			reversedCard++;
-			cardCheck(0,1);
+			cardCheck(e,0,1);
 		} else if (e.getSource().equals(label[1][1])&&label[1][1].getName()=="활성") {
 			reversedCard++;
-			cardCheck(1,1);
+			cardCheck(e,1,1);
 		} else if (e.getSource().equals(label[2][1])&&label[2][1].getName()=="활성") {
 			reversedCard++;
-			cardCheck(2,1);
+			cardCheck(e,2,1);
 		} else if (e.getSource().equals(label[3][1])&&label[3][1].getName()=="활성") {
 			reversedCard++;
-			cardCheck(3,1);
+			cardCheck(e,3,1);
 		} else if (e.getSource().equals(label[4][1])&&label[4][1].getName()=="활성") {
 			reversedCard++;
-			cardCheck(4,1);
+			cardCheck(e,4,1);
 		}
-		System.out.println("뒤집힌 카드 개수 : " + reversedCard);
+		
 		System.out.println("currX : " + currX);
 		System.out.println("currY : " + currY);
 	}
 
-	public void checkIsClicked(int x1, int y1, int x2, int y2) {
+	public boolean checkIsClicked(int x1, int y1, int x2, int y2) {
 		if (x1 == x2 && y1 == y2) {
 			label[x1][y1].setName("비활성");
+			return true;
 		} else if (x1 != x2 || y1 != y2) {
 			label[x1][y1].setName("활성");
 		}
+		return false;
 	}
 
 	public boolean isReverseTwice(int level) { // 카드 두개가 뒤집혔는지 확인.
@@ -448,7 +454,7 @@ public class FindSamePicture extends JPanel {
 				cardBackImg[x][y] = cardBackImg2[index];
 				label[x][y].setBounds(cardP[x][y].x, cardP[x][y].y, cardW, cardH);
 				label[x][y].addMouseListener(new MouseSetting());
-				label[x][y].setName("활성");
+				
 				cardFrontImg[x][y] = new MyImage(new ImageIcon(
 						frontImgs.get(index).getImage().getScaledInstance(cardW, cardH, Image.SCALE_SMOOTH)));
 				if (frontImgs.get(index).getName().equals("1번")) {
@@ -465,6 +471,7 @@ public class FindSamePicture extends JPanel {
 				add(label[x][y]);
 				label[x][y].setIcon(cardFrontImg[x][y]);
 				index++;
+				label[x][y].setName("활성");
 			}
 		}
 	}

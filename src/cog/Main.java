@@ -56,7 +56,7 @@ public class Main extends JFrame {
 			new ImageIcon("temp/exit2.png").getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH));
 	DrawThread t = new DrawThread();
 	static JScrollPane scroll;
-	JButton[] btn = { new JButton("사진 맞추기"), new JButton("계산하기"), new JButton("같은 그림카드 찾기"), new JButton("주사위계산하기"),
+	JButton[] btn = { new JButton("사진 맞추기"), new JButton("주사위계산하기"), new JButton("같은 그림카드 찾기"), new JButton("계산하기"),
 			new JButton("초성 단어찾기"), new JButton("필사"), new JButton("치매예방수칙"), new JButton("미정"), new JButton("미정"),
 			new JButton("미정"), new JButton("미정"), new JButton("미정"), new JButton("미정"), };
 	JButton exitBtn = new JButton(btnImg);
@@ -64,6 +64,7 @@ public class Main extends JFrame {
 	TitlePanel titlePanel = new TitlePanel();
 	PictureQuiz pictureQuizPanel = new PictureQuiz();
 	FindSamePicture fsp = new FindSamePicture();
+	DiceCalculation dice = new DiceCalculation();
 	static Color titleFontColor = C.a10035[0];
 	static Color selectGamePanelColor = C.a10035[1];
 	static Color titlePanelColor = C.a10035[2];
@@ -76,6 +77,7 @@ public class Main extends JFrame {
 		setVisible(true);
 		pictureQuizPanel.refresh();
 		this.requestFocus();
+		dice.setVisible(false);
 		fsp.setVisible(false);
 		t.start();
 	}
@@ -85,7 +87,7 @@ public class Main extends JFrame {
 		pictureQuizPanel.setVisible(false);
 		selectGamePanel.setVisible(true);
 		fsp.setVisible(false);
-		
+		dice.setVisible(false);
 		scroll.setVisible(true);
 	}
 
@@ -95,15 +97,27 @@ public class Main extends JFrame {
 		selectGamePanel.setVisible(false);
 		fsp.setVisible(false);
 		scroll.setVisible(false);
+		dice.setVisible(false);
 	}
 	
 	public void goFsp() {//  버튼누르면 패널 전환하는 메소드
 		titlePanel.setVisible(true);
 		pictureQuizPanel.setVisible(false);
 		selectGamePanel.setVisible(false);
+		dice.setVisible(false);
 		scroll.setVisible(false);
 		fsp.setVisible(true);
 		fsp.paintFirstScreen();
+	}
+	
+	public void goDice() {//  버튼누르면 패널 전환하는 메소드
+		titlePanel.setVisible(true);
+		pictureQuizPanel.setVisible(false);
+		selectGamePanel.setVisible(false);
+		scroll.setVisible(false);
+		fsp.setVisible(false);
+		dice.setOneTwoNum(dice.getNumb(1), dice.getNumb(2));
+		dice.setVisible(true);
 	}
 
 	public void add() {
@@ -117,7 +131,10 @@ public class Main extends JFrame {
 		titlePanel.setLayout(null);
 		titlePanel.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT / 5);
 		titlePanel.add(exitBtn);
-
+		
+		dice.setBounds(0,SCREEN_HEIGHT/5,SCREEN_WIDTH,SCREEN_HEIGHT*4/5);
+		dice.addKeyListener(new KeySetting());
+		
 		fsp.setBounds(0, SCREEN_HEIGHT / 5, SCREEN_WIDTH, SCREEN_HEIGHT * 4 / 5);
 		fsp.addKeyListener(new KeySetting());
 		pictureQuizPanel.setBounds(0, SCREEN_HEIGHT / 5, SCREEN_WIDTH, SCREEN_HEIGHT * 4 / 5);
@@ -149,7 +166,7 @@ public class Main extends JFrame {
 																														// 개수에
 																														// 따른
 																														// 패널
-																														// 크기
+		add(dice);																										// 크기
 		add(fsp);																								// 조정
 		add(pictureQuizPanel);
 		add(titlePanel);
@@ -176,6 +193,14 @@ public class Main extends JFrame {
 				break;
 			case KeyEvent.VK_BACK_SPACE:
 				goToMain();
+				int a = dice.getNumb(1);
+				int b = dice.getNumb(2);
+				a = dice.getNumb(1);
+				b = dice.getNumb(2);
+				dice.setOneTwoNum(a,b);
+				dice.isViewAns = 0;
+				dice.answerLabel.setText("문제를 풀어보세요");
+				dice.repaint();
 				title = "인지프로그램";
 				titlePanel.repaint();
 				fsp.removeLabels(fsp.level);
@@ -249,6 +274,9 @@ public class Main extends JFrame {
 				title = " 같은카드찾기";
 				titlePanel.repaint();
 				fsp.requestFocus();
+			}else if(e.getActionCommand() == "주사위계산하기") {
+				goDice();
+				title = " 주사위 계산";
 			}
 		}
 
